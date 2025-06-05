@@ -86,6 +86,8 @@ public class QuarkusReveal implements Callable<Integer> {
                 throw new IOException("Deck file not found: " + deck);
             }
         }
+     // Only read and parse front matter if we have an actual file (not DEMO)
+        if (!resolvedDeck.equals("DEMO")) {
         var content = FILE_CACHE.read(deckPath).contentAsString();
         if (hasFrontMatter(content)) {
             final var fm = parseFrontMatter(content);
@@ -102,6 +104,7 @@ public class QuarkusReveal implements Callable<Integer> {
             setFromFM(fm, "height");
             setFromFM(fm, "margin");
         }
+    }
         System.setProperty("deck", resolvedDeck);
         System.setProperty("title", title);
         System.setProperty("theme", "theme-" + theme);
